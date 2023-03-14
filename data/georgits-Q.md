@@ -25,11 +25,13 @@ PowerPerp.sol - [33](https://github.com/code-423n4/2023-03-polynomial/blob/main/
 
 SystemManager.sol - [54](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/SystemManager.sol#L54-L57), [62](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/SystemManager.sol#L62-L81)
 
-ShortToken.sol - [67](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/ShortToken.sol#L67)
-
 LiquidityPool.sol - [651](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L651)
 
-KangarooVault.sol - [549](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L549)
+KangarooVault.sol - [222](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L222), [549](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L549)
+
+ShortCollateral.sol - [141](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/ShortCollateral.sol#L141)
+
+LiquidityPool.sol - [254](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L254), [508](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L508)
 
 ## Remove unused imports
 SystemManager.sol - [14](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/SystemManager.sol#L14)
