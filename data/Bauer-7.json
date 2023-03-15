@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "Bauer",
+  "risk": "2",
+  "title": "Solmate safeTransfer and safeTransferFrom does not check the codesize of the token address, which may lead to fund loss",
+  "issueId": 7,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/7"
+}
