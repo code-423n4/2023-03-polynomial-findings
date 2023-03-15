@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0x52",
+  "risk": "2",
+  "title": "SignedMath#signedAbs will unexpectedly revert if int256.min is input value",
+  "issueId": 18,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/18"
+}
