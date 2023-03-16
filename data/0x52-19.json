@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0x52",
+  "risk": "3",
+  "title": "KangarooVault#removeCollateral fails to actually remove collateral from position",
+  "issueId": 19,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/19"
+}
