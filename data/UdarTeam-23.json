@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "UdarTeam",
+  "risk": "2",
+  "title": "`setVault` could be front-runned",
+  "issueId": 23,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/23"
+}
