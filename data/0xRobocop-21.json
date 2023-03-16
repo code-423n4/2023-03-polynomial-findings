@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0xRobocop",
+  "risk": "3",
+  "title": "Losses of the LiquidityPool contract are not reflected on the price of LPs",
+  "issueId": 21,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/21"
+}
