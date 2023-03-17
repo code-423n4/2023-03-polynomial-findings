@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "SunSec",
+  "risk": "2",
+  "title": "Failed transfer with low level call",
+  "issueId": 37,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/37"
+}
