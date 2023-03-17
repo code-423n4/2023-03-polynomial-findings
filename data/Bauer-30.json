@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "Bauer",
+  "risk": "3",
+  "title": "Missing call to EXCHANGE.removeCollateral leads to the transaction to fail and the asset to be locked",
+  "issueId": 30,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/30"
+}
