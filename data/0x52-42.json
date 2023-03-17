@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0x52",
+  "risk": "3",
+  "title": "KangarooVault will completely break if short position is ever completely closed",
+  "issueId": 42,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/42"
+}
