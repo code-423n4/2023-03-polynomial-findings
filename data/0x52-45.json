@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0x52",
+  "risk": "3",
+  "title": "Exchange#liquidate calls can be front run for underwater positions to cause loss of funds for liquidator",
+  "issueId": 45,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/45"
+}
