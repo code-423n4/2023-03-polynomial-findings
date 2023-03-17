@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "kaden",
+  "risk": "2",
+  "title": "LiquidityPool depositFee/withdrawalFee not applied on queued deposits/withdrawals",
+  "issueId": 49,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/49"
+}
