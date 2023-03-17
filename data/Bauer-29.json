@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "Bauer",
+  "risk": "3",
+  "title": "User's collateral assets may be locked in the contract",
+  "issueId": 29,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/29"
+}
