@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0x52",
+  "risk": "3",
+  "title": "Current implementation of _placeDelayedOrder allows users to place massive orders that can't be properly hedged",
+  "issueId": 57,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/57"
+}
