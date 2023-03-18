@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0xbepresent",
+  "risk": "2",
+  "title": "Positions token may be minted to non receiver ERC721",
+  "issueId": 63,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/63"
+}
