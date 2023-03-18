@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0x52",
+  "risk": "2",
+  "title": "LiquidityPool#placeQueuedOrder can be DOS'd causing vault to becoming underexposed and cause losses to LPs",
+  "issueId": 51,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/51"
+}
