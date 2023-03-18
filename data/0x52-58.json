@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0x52",
+  "risk": "3",
+  "title": "FundingRate is applied at the wrong time which can cause abuse",
+  "issueId": 58,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/58"
+}
