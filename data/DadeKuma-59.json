@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "DadeKuma",
+  "risk": "3",
+  "title": "Lack of price validity check from Synthetix results in loss of funds while liquidating",
+  "issueId": 59,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/59"
+}
