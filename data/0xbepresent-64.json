@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "0xbepresent",
+  "risk": "3",
+  "title": "The protocol may run out of funds due to a malfunction in ```processDeposits()``` function, causing the protocol may not cover their margins",
+  "issueId": 64,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/64"
+}
