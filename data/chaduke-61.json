@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "chaduke",
+  "risk": "2",
+  "title": "getMarkPrice() has a divide-before-multiply precision lose issue, resulting in a market price that is higher than it is supposed to be.",
+  "issueId": 61,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/61"
+}
