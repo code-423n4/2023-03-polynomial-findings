@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "RaymondFam",
+  "risk": "2",
+  "title": "Users' collateral could get stuck permanently after fully closing short trades",
+  "issueId": 67,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/67"
+}
