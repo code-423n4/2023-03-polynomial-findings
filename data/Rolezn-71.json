@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "Rolezn",
+  "risk": "2",
+  "title": "`KangarooVault` can be created for not-yet-existing ERC20 tokens, which allows attackers to set traps for steal short position NFTs",
+  "issueId": 71,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/71"
+}
