@@ -23,6 +23,12 @@ FILE : 2023-03-polynomial/src/Exchange.sol
 
 [Exchange.sol#L413-L414](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L413-L414)
 
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+   295: uint256 availableFunds = uint256(int256(totalFunds) - usedFunds);
+
+[LiquidityPool.sol#L295](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L295)
+
 Recommended Mitigation Steps:
 Consider using OpenZeppelin’s SafeCast library to prevent unexpected overflows when casting from uint256.
 
@@ -36,6 +42,11 @@ FILE : 2023-03-polynomial/src/ShortCollateral.sol
 
 [ShortCollateral.sol#L85-L101](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/ShortCollateral.sol#L85-L101)
 
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+[KangarooVault.sol#L220-L224](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L220-L224)
+
+
 ##
 
 ### [L-3] Use safeMint variant instead of normal mint function
@@ -44,9 +55,15 @@ Te safeMint function helps to prevent common errors and vulnerabilities in ERC20
 
 FILE : 2023-03-polynomial/src/Exchange.sol
 
-  241:  powerPerp.mint(msg.sender, params.amount);
+     241:  powerPerp.mint(msg.sender, params.amount);
 
 [Exchange.sol#L241](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L241)
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+    189:   liquidityToken.mint(user, tokensToMint);
+
+[LiquidityPool.sol#L189](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L189)
 
 ##
 
@@ -92,6 +109,19 @@ FILE : 2023-03-polynomial/src/ShortCollateral.sol
 
 [ShortCollateral.sol#L85-L90] (https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/ShortCollateral.sol#L85-L90)
 
+FIE : 2023-03-polynomial/src/LiquidityPool.sol
+
+the amount not checked with zero value 
+
+[LiquidityPool.sol#L184-L195](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L184-L195)
+
+[LiquidityPool.sol#L247-L250](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L247-L250)
+
+[LiquidityPool.sol#L657-L661](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L657-L661)
+
+[LiquidityPool.sol#L665-L668](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L665-L668)
+
+[LiquidityPool.sol#L672-L682](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L672-L682)
 
 Recommended Mitigation:
 
@@ -111,14 +141,64 @@ FILE : 2023-03-polynomial/src/Exchange.sol
 
 [Exchange.sol#L411](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L411)
 
+##
 
+### [L-6] LACK OF CHECKS ADDRESS(0)
 
+The following methods have a lack of checks if the received argument is an address, it’s good practice in order to reduce human error to check that the address specified in the function is different than address(0)
+
+FILE : FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+  function setFeeReceipient(address _feeReceipient) external requiresAuth {
+        feeReceipient = _feeReceipient;
+    }
+
+[LiquidityPool.sol#L650-L652](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L650-L652)
 
 ##
 
-### [L-4] 
+### [L-7] CRITICAL ADDRESS CHANGES SHOULD USE TWO-STEP PROCEDURE 
+
+The critical procedures should be two step process.
+See similar findings in previous Code4rena contests for reference:
+(https://code4rena.com/reports/2022-06-illuminate/#2-critical-changes-should-use-two-step-procedure)
+
+FILE : FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+  function setFeeReceipient(address _feeReceipient) external requiresAuth {
+        feeReceipient = _feeReceipient;
+    }
+
+[LiquidityPool.sol#L650-L652](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L650-L652)
+
+##
+
+### [L-8] Solmate's SafeTransferLib doesn't check whether the ERC20 contract exists
+
+Solmate's SafeTransferLib, which is often used to interact with non-compliant/unsafe ERC20 tokens, does not check whether the ERC20 contract exists. The following code will not revert in case the token doesn't exist (yet)
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+  207: SUSD.safeTransferFrom(msg.sender, address(this), amount);
+
+[KangarooVault.sol#L207](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L207)
+
+##
+
+### [L-9] User balance is not checked before proceed initiateDeposit()
+
+As per current implementations user can call initiateDeposit() function without having enough balance in user account 
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+[KangarooVault.sol#L183-L208](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L183-L208)  
+
+Recombined Mitigation:
+
+require (address(user).balance > amount, "Not enough balance ");
 
 
+##
 # NON CRITICAL FINDINGS
 
 ##
@@ -131,7 +211,19 @@ FILE : 2023-03-polynomial/src/Exchange.sol
 
     2: pragma solidity ^0.8.9;
 
-[Exchange.sol#L2](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L2)
+[Exchange.sol#L2](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L2)\
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+    2: pragma solidity ^0.8.9;
+
+[LiquidityPool.sol#L2](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L2)
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+   2: pragma solidity ^0.8.9;
+
+[KangarooVault.sol#L2](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L2)
 
 ##
 
@@ -144,7 +236,7 @@ FILE : 2023-03-polynomial/src/Exchange.sol
 [xchange.sol#L186](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L186)
 [Exchange.sol#L100-L105](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L100-L105)
 [Exchange.sol#L205-L206](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L205-L206)
-[]()
+[LiquidityPool.sol#L430-L435](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L430-L435)
 []()
 []()
 []()
@@ -176,7 +268,7 @@ FILE : 2023-03-polynomial/src/Exchange.sol
 
 ##
 
-### [NC-4] Use @dev or @param to explain the state variables . @notice tag used for explaining the functions 
+### [NC-5] Use @dev or @param to explain the state variables . @notice tag used for explaining the functions 
 
 CONTEXT
 ALL CONTRACTS
@@ -185,14 +277,15 @@ ALL CONTRACTS
 
 ##
 
-### [NC-5] NATSPEC is Missing 
+### [NC-6] NATSPEC is Missing 
 
 [Exchange.sol#L67-L72](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L67-L72)
 [Exchange.sol#L74-L79](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L74-L79)
+[LiquidityPool.sol#L27-L49](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L27-L49)
 
 ##
 
-### [NC-6] GENERATE PERFECT CODE HEADERS EVERY TIME
+### [NC-7] GENERATE PERFECT CODE HEADERS EVERY TIME
 
 Description
 I recommend using header for Solidity code layout and readability
@@ -201,7 +294,7 @@ I recommend using header for Solidity code layout and readability
 
 ##
 
-### [NC-7]  NO SAME VALUE INPUT CONTROL
+### [NC-8]  NO SAME VALUE INPUT CONTROL
 
 FILE : 2023-03-polynomial/src/Exchange.sol
 
@@ -219,9 +312,17 @@ FILE : 2023-03-polynomial/src/Exchange.sol
 
 [Exchange.sol#L223-L226](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L223-L226)
 
+FILE : FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+  function setFeeReceipient(address _feeReceipient) external requiresAuth {
+        feeReceipient = _feeReceipient;
+    }
+
+[LiquidityPool.sol#L650-L652](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L650-L652)
+
 ##
 
-### [NC-8] NATSPEC COMMENTS SHOULD BE INCREASED IN CONTRACTS
+### [NC-9] NATSPEC COMMENTS SHOULD BE INCREASED IN CONTRACTS
 
 CONTEXT
 ALL CONTRACTS
@@ -232,6 +333,111 @@ In complex projects such as Defi, the interpretation of all functions and their 
 
 Recommendation
 NatSpec comments should be increased in Contracts
+
+##
+
+### [NC-10] Pragma float
+
+All the contracts in scope are floating the pragma version.
+
+Recommendation
+Locking the pragma helps to ensure that contracts do not accidentally get deployed using an outdated compiler version.
+
+Note that pragma statements can be allowed to float when a contract is intended for consumption by other developers, as in the case with contracts in a library or a package.
+
+##
+
+### [NC-11] GENERATE PERFECT CODE HEADERS EVERY TIME
+
+Description
+I recommend using header for Solidity code layout and readability
+
+[PERFECT CODE HEADERS](https://github.com/transmissions11/headers)
+
+##
+
+### [NC-12] Shorter inheritance list
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+  27: contract LiquidityPool is ILiquidityPool, Auth, ReentrancyGuard, PauseModifier {
+
+[LiquidityPool.sol#L27](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L27)
+
+##
+
+### [NC-13] Uppercase immutable variables
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+   56: bytes32 public immutable baseAsset;
+
+[LiquidityPool.sol#L56](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L56)
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+   60:  bytes32 public immutable name;
+
+[KangarooVault.sol#L60](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L60)
+
+
+##
+
+### [NC-14] Inside the immutable header there are normal state variables also declared. This is not a good code practice 
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+[LiquidityPool.sol#L52-L68](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L52-L68)
+
+##
+
+### [NC-15] Use require instead of assert
+
+The Solidity assert() function is meant to assert invariants. Properly functioning code should never reach a failing assert statement.
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+   220: assert(queuedDepositHead + count - 1 < nextQueuedDepositId);
+
+[LiquidityPool.sol#L220](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L220)
+
+##
+
+### [NC-16] Use any error codes with descriptive reasons of failure instead of empty return 
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+   227:  return;
+
+[LiquidityPool.sol#L227](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L227)
+
+##
+
+### [NC-17] Wrong description for variable
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+    86: /// @notice Minimum deposit delay
+    87: uint256 public minWithdrawDelay;
+
+Recommendations:
+
+    86: /// @notice Minimum withdraw delay
+    87: uint256 public minWithdrawDelay;
+
+##
+
+### [NC-18] 
+
+
+
+
+  
+   
+
+
+
+
 
 
 
