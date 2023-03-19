@@ -65,11 +65,27 @@ FILE : 2023-03-polynomial/src/LiquidityPool.sol
 
 [LiquidityPool.sol#L189](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L189)
 
+    235:  liquidityToken.mint(current.user, tokensToMint);
+
+[LiquidityPool.sol#L235](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L235)
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+    191: VAULT_TOKEN.mint(user, tokensToMint);
+
+[KangarooVault.sol#L191](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L191)
+
+    258: VAULT_TOKEN.mint(current.user, tokensToMint);
+
+[KangarooVault.sol#L258](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L258)
+
+    
+
 ##
 
 ### [L-4] LACK OF CHECKS THE INTEGER RANGES
 
-The integer ranges not checked before assigning the values to state variables. This will cause the serious damage if we assigns unexpected values to state variables
+The integer ranges not checked before assigning the values to state variables. This will cause the serious damage if we assigns unexpected values to state variables and functions 
 
 FILE : 2023-03-polynomial/src/Exchange.sol
 
@@ -196,6 +212,88 @@ FILE : 2023-03-polynomial/src/KangarooVault.sol
 Recombined Mitigation:
 
 require (address(user).balance > amount, "Not enough balance ");
+
+##
+
+### [L-10] A single point of failure
+
+The requiresAuth role has a single point of failure and requiresAuth can use critical a few functions.
+
+Even if protocol admins/developers are not malicious there is still a chance for Owner keys to be stolen. In such a case, the attacker can cause serious damage to the project due to important functions. In such a case, users who have invested in project will suffer high financial losses
+
+requiresAuth  functions :
+
+FILE : 2023-03-polynomial/src/Exchange.sol
+
+   216: function setSkewNormalizationFactor(uint256 _skewNormalizationFactor) external requiresAuth {
+
+   223: function setMaxFundingRate(uint256 _maxFundingRate) external requiresAuth {
+
+[Exchange.sol#L216-L226](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L216-L226)
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+     function setFeeReceipient(address _feeReceipient) external requiresAuth {
+        require(_feeReceipient != address(0x0));
+
+        emit UpdateFeeReceipient(feeReceipient, _feeReceipient);
+
+        feeReceipient = _feeReceipient;
+     }
+
+[KangarooVault.sol#L465-L471](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L465-L471)  
+
+   function setFees(uint256 _performanceFee, uint256 _withdrawalFee) external requiresAuth {
+        require(_performanceFee <= 1e17 && _withdrawalFee <= 1e16);
+
+        emit UpdateFees(performanceFee, withdrawalFee, _performanceFee, _withdrawalFee);
+
+        performanceFee = _performanceFee;
+        withdrawalFee = _withdrawalFee;
+    }
+
+[KangarooVault.sol#L476-L483](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L476-L483)
+
+[KangarooVault.sol#L487-L550](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L487-L550)
+
+##
+
+### [L-11] Front running attacks by the requiresAuth 
+
+All parameters values are not a constant value and can be changed with setter functions, before a function using the setter methods state variables value in the project, setter functions can be triggered by requiresAuth and operations can be blocked
+
+FILE : 2023-03-polynomial/src/Exchange.sol
+
+   216: function setSkewNormalizationFactor(uint256 _skewNormalizationFactor) external requiresAuth {
+
+   223: function setMaxFundingRate(uint256 _maxFundingRate) external requiresAuth {
+
+[Exchange.sol#L216-L226](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L216-L226)
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+     function setFeeReceipient(address _feeReceipient) external requiresAuth {
+        require(_feeReceipient != address(0x0));
+
+        emit UpdateFeeReceipient(feeReceipient, _feeReceipient);
+
+        feeReceipient = _feeReceipient;
+     }
+
+[KangarooVault.sol#L465-L471](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L465-L471)  
+
+   function setFees(uint256 _performanceFee, uint256 _withdrawalFee) external requiresAuth {
+        require(_performanceFee <= 1e17 && _withdrawalFee <= 1e16);
+
+        emit UpdateFees(performanceFee, withdrawalFee, _performanceFee, _withdrawalFee);
+
+        performanceFee = _performanceFee;
+        withdrawalFee = _withdrawalFee;
+    }
+
+[KangarooVault.sol#L476-L483](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L476-L483)
+
+[KangarooVault.sol#L487-L550](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L487-L550)
 
 
 ##
@@ -380,6 +478,14 @@ FILE : 2023-03-polynomial/src/KangarooVault.sol
 
 [KangarooVault.sol#L60](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L60)
 
+FILE : 2023-03-polynomial/src/PowerPerp.sol
+
+[PowerPerp.sol#L9-L10](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/PowerPerp.sol#L9-L10)
+
+FILE : 2023-03-polynomial/src/ShortToken.sol
+
+[ShortToken.sol#L9](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/ShortToken.sol#L9)  
+[ShortToken.sol#L11](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/ShortToken.sol#L11)
 
 ##
 
@@ -427,12 +533,100 @@ Recommendations:
 
 ##
 
-### [NC-18] 
+### [NC-18]  Add a timelock to critical functions
 
+FILE : 2023-03-polynomial/src/Exchange.sol
 
+function setSkewNormalizationFactor(uint256 _skewNormalizationFactor) external requiresAuth {
+        emit UpdateSkewNormalizationFactor(skewNormalizationFactor, _skewNormalizationFactor);
+        skewNormalizationFactor = _skewNormalizationFactor;
+    }
 
+[Exchange.sol#L216-L219](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L216-L219)
 
-  
+      function setMaxFundingRate(uint256 _maxFundingRate) external requiresAuth {
+        emit UpdateMaxFundingRate(maxFundingRate, _maxFundingRate);
+        maxFundingRate = _maxFundingRate;
+    }
+
+[Exchange.sol#L223-L226](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L223-L226)
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+     function setFeeReceipient(address _feeReceipient) external requiresAuth {
+        require(_feeReceipient != address(0x0));
+
+        emit UpdateFeeReceipient(feeReceipient, _feeReceipient);
+
+        feeReceipient = _feeReceipient;
+     }
+
+[KangarooVault.sol#L465-L471](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L465-L471)  
+
+   function setFees(uint256 _performanceFee, uint256 _withdrawalFee) external requiresAuth {
+        require(_performanceFee <= 1e17 && _withdrawalFee <= 1e16);
+
+        emit UpdateFees(performanceFee, withdrawalFee, _performanceFee, _withdrawalFee);
+
+        performanceFee = _performanceFee;
+        withdrawalFee = _withdrawalFee;
+    }
+
+[KangarooVault.sol#L476-L483](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L476-L483)
+
+[KangarooVault.sol#L487-L550](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L487-L550)
+
+##
+
+### [NC-19] The nonReentrant modifier should occur before all other modifiers
+
+This is a best-practice to protect against reentrancy in other modifiers
+
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+      function closeLong(uint256 amount, address user, bytes32 referralCode)
+        external
+        override
+        onlyExchange
+        nonReentrant
+        returns (uint256 totalCost)
+
+[LiquidityPool.sol#L462-L467](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L462-L467)
+
+    function openShort(uint256 amount, address user, bytes32 referralCode)
+        external
+        override
+        onlyExchange
+        nonReentrant
+        returns (uint256 totalCost)
+
+[LiquidityPool.sol#L494-L499](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L494-L499)
+
+[LiquidityPool.sol#L526-L531](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L526-L531)
+
+[LiquidityPool.sol#L557](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L557)
+[LiquidityPool.sol#L591](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L591)  
+
+[LiquidityPool.sol#L613](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L613)
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+   376:  function openPosition(uint256 amt, uint256 minCost) external requiresAuth nonReentrant {
+
+  383:   function closePosition(uint256 amt, uint256 maxCost) external requiresAuth nonReentrant {
+
+   389:    function clearPendingOpenOrders(uint256 maxCost) external requiresAuth nonReentrant {
+ 
+  395:   function clearPendingCloseOrders(uint256 minCost) external requiresAuth nonReentrant {
+
+  401:   function transferPerpMargin(int256 marginDelta) external requiresAuth nonReentrant {
+   
+   424:   function addCollateral(uint256 additionalCollateral) external requiresAuth nonReentrant {
+
+   436:  function removeCollateral(uint256 collateralToRemove) external requiresAuth nonReentrant {
+
+   450:  function executePerpOrders(bytes[] calldata priceUpdateData) external payable requiresAuth nonReentrant {
+
    
 
 
@@ -445,8 +639,8 @@ Recommendations:
 
 
 
-
-
+FILE : 2023-03-polynomial/src/LiquidityPool.sol
+FILE : 2023-03-polynomial/src/Exchange.sol
 
 NC-1	Missing checks for address(0) when assigning values to address state variables	1
 NC-2	require() / revert() statements should have descriptive reason strings	89
