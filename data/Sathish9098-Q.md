@@ -79,8 +79,6 @@ FILE : 2023-03-polynomial/src/KangarooVault.sol
 
 [KangarooVault.sol#L258](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L258)
 
-    
-
 ##
 
 ### [L-4] LACK OF CHECKS THE INTEGER RANGES
@@ -141,7 +139,7 @@ the amount not checked with zero value
 
 Recommended Mitigation:
 
-require(VARIABLE > 0, "Zero value"); 
+require(INPUTVARIABLE > 0, "Zero value"); 
 
 ##
 
@@ -170,6 +168,8 @@ FILE : FILE : 2023-03-polynomial/src/LiquidityPool.sol
     }
 
 [LiquidityPool.sol#L650-L652](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L650-L652)
+
+
 
 ##
 
@@ -295,6 +295,120 @@ FILE : 2023-03-polynomial/src/KangarooVault.sol
 
 [KangarooVault.sol#L487-L550](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L487-L550)
 
+##
+
+### [L-12] Use .call instead of .transfer to send ether
+
+.transfer will relay 2300 gas and .call will relay all the gas. If the receive/fallback function from the recipient proxy contract has complex logic, using .transfer will fail, causing integration issues.
+
+FILE : 2023-03-polynomial/src/KangarooVault.sol
+
+  549: ERC20(token).transfer(receiver, amt);
+
+[KangarooVault.sol#L549](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L549)
+
+Recommendation
+Replace .transfer with .call. Note that the result of .call need to be checked.
+
+##
+
+### [L-13] Attacker can frontrun the init() function
+
+In the case of the init() function, an attacker may observe a transaction waiting to call the init() function and submit their own transaction with higher gas fees that calls the same function with different or malicious parameters. If the attacker's transaction is processed first, it can potentially manipulate the initialization process of the smart contract, resulting in unexpected or malicious behavior
+
+FILE : 2023-03-polynomial/src/SystemManager.sol
+
+       function init(
+        address _pool,
+        address _powerPerp,
+        address _exchange,
+        address _liquidityToken,
+        address _shortToken,
+        address _synthetixAdapter,
+        address _shortCollateral
+       ) public {
+        require(!isInitialized);
+        refreshSynthetixAddresses();
+
+        pool = ILiquidityPool(_pool);
+        powerPerp = IPowerPerp(_powerPerp);
+        exchange = IExchange(_exchange);
+        liquidityToken = ILiquidityToken(_liquidityToken);
+        shortToken = IShortToken(_shortToken);
+        synthetixAdapter = ISynthetixAdapter(_synthetixAdapter);
+        shortCollateral = IShortCollateral(_shortCollateral);
+        isInitialized = true;
+       }
+
+[SystemManager.sol#L62-L82](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/SystemManager.sol#L62-L82)
+
+Recommended Mitigation:
+
+Use a timelock
+
+##
+
+### [L-14] init() FUNCTION CAN BE CALLED BY ANYBODY
+
+init() function can be called anybody when the contract is not initialized.
+
+More importantly, if someone else runs this function, they will have full authority because of the owner state variable.
+
+Here is a definition of init() function
+
+FILE : 2023-03-polynomial/src/SystemManager.sol
+
+       function init(
+        address _pool,
+        address _powerPerp,
+        address _exchange,
+        address _liquidityToken,
+        address _shortToken,
+        address _synthetixAdapter,
+        address _shortCollateral
+       ) public {
+        require(!isInitialized);
+        refreshSynthetixAddresses();
+
+        pool = ILiquidityPool(_pool);
+        powerPerp = IPowerPerp(_powerPerp);
+        exchange = IExchange(_exchange);
+        liquidityToken = ILiquidityToken(_liquidityToken);
+        shortToken = IShortToken(_shortToken);
+        synthetixAdapter = ISynthetixAdapter(_synthetixAdapter);
+        shortCollateral = IShortCollateral(_shortCollateral);
+        isInitialized = true;
+       }
+
+[SystemManager.sol#L62-L82](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/SystemManager.sol#L62-L82)
+
+Recommended Mitigation Steps
+
+Add a control that makes init() only call the Deployer Contract or EOA
+
+   if (msg.sender != DEPLOYER_ADDRESS) 
+    {
+      revert NotDeployer();
+    }
+
+##
+
+### [L-15] Add an event for critical parameter changes
+
+Adding events for critical parameter changes will facilitate offchain monitoring and indexing
+
+FILE : FILE : 2023-03-polynomial/src/LiquidityPool.sol
+
+  function setFeeReceipient(address _feeReceipient) external requiresAuth {
+        feeReceipient = _feeReceipient;
+    }
+
+[LiquidityPool.sol#L650-L652](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L650-L652)
+
+Recommended Mitigation:
+
+Add event for critical address changes with old and new address
+
 
 ##
 # NON CRITICAL FINDINGS
@@ -335,9 +449,6 @@ FILE : 2023-03-polynomial/src/KangarooVault.sol
 [Exchange.sol#L100-L105](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L100-L105)
 [Exchange.sol#L205-L206](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L205-L206)
 [LiquidityPool.sol#L430-L435](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L430-L435)
-[]()
-[]()
-[]()
 
 ##
 
@@ -375,14 +486,6 @@ ALL CONTRACTS
 
 ##
 
-### [NC-6] NATSPEC is Missing 
-
-[Exchange.sol#L67-L72](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L67-L72)
-[Exchange.sol#L74-L79](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/Exchange.sol#L74-L79)
-[LiquidityPool.sol#L27-L49](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/LiquidityPool.sol#L27-L49)
-
-##
-
 ### [NC-7] GENERATE PERFECT CODE HEADERS EVERY TIME
 
 Description
@@ -392,7 +495,7 @@ I recommend using header for Solidity code layout and readability
 
 ##
 
-### [NC-8]  NO SAME VALUE INPUT CONTROL
+### [NC-8] NO SAME VALUE INPUT CONTROL
 
 FILE : 2023-03-polynomial/src/Exchange.sol
 
@@ -442,15 +545,6 @@ Recommendation
 Locking the pragma helps to ensure that contracts do not accidentally get deployed using an outdated compiler version.
 
 Note that pragma statements can be allowed to float when a contract is intended for consumption by other developers, as in the case with contracts in a library or a package.
-
-##
-
-### [NC-11] GENERATE PERFECT CODE HEADERS EVERY TIME
-
-Description
-I recommend using header for Solidity code layout and readability
-
-[PERFECT CODE HEADERS](https://github.com/transmissions11/headers)
 
 ##
 
@@ -627,6 +721,83 @@ FILE : 2023-03-polynomial/src/KangarooVault.sol
 
    450:  function executePerpOrders(bytes[] calldata priceUpdateData) external payable requiresAuth nonReentrant {
 
+##
+
+### [NC-20] Missing NATSPEC
+
+FILE : 2023-03-polynomial/src/SystemManager.sol
+
+NATSPEC is missing for constructors, state variables , public functions 
+
+[SystemManager.sol#L33-L96](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/SystemManager.sol#L33-L96) 
+
+[KangarooVault.sol#L21-L57](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L21-L57)
+
+[KangarooVault.sol#L156-L172](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L156-L172)
+
+##
+
+### [NC-21] Remove console.log import in Lock.sol
+
+[KangarooVault.sol#L4](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L4)
+
+##
+
+### [NC-22] Function writing that does not comply with the Solidity Style Guide
+
+Context
+All Contracts
+
+Description
+Order of Functions; ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier. But there are contracts in the project that do not comply with this.
+
+(https://docs.soliditylang.org/en/v0.8.17/style-guide.html)
+
+Functions should be grouped according to their visibility and ordered:
+
+constructor
+receive function (if exists)
+fallback function (if exists)
+external
+public
+internal
+private
+within a grouping, place the view and pure functions last
+
+##
+
+### [NC-23] Tokens accidentally sent to the contract cannot be recovered
+
+It can’t be recovered if the tokens accidentally arrive at the contract address, which has happened to many popular projects, so I recommend adding a recovery code to your critical contracts.
+
+Recommended Mitigation Steps
+Add this code:
+
+ /**
+  * @notice Sends ERC20 tokens trapped in contract to external address
+  * @dev Onlyowner is allowed to make this function call
+  * @param account is the receiving address
+  * @param externalToken is the token being sent
+  * @param amount is the quantity being sent
+  * @return boolean value indicating whether the operation succeeded.
+  *
+ */
+  function rescueERC20(address account, address externalToken, uint256 amount) public onlyOwner returns (bool) {
+    IERC20(externalToken).transfer(account, amount);
+    return true;
+  }
+}
+
+##
+
+### [NC-24] Project Upgrade and Stop Scenario should be
+
+At the start of the project, the system may need to be stopped or upgraded, I suggest you have a script beforehand and add it to the documentation. This can also be called an ” EMERGENCY STOP (CIRCUIT BREAKER) PATTERN “.
+
+(https://github.com/maxwoe/solidity_patterns/blob/master/security/EmergencyStop.sol)
+
+
+
    
 
 
@@ -638,19 +809,3 @@ FILE : 2023-03-polynomial/src/KangarooVault.sol
 
 
 
-
-FILE : 2023-03-polynomial/src/LiquidityPool.sol
-FILE : 2023-03-polynomial/src/Exchange.sol
-
-NC-1	Missing checks for address(0) when assigning values to address state variables	1
-NC-2	require() / revert() statements should have descriptive reason strings	89
-NC-3	TODO Left in the code	1
-NC-4	Event is missing indexed fields	67
-NC-5	Constants should be defined rather than using magic numbers	1
-NC-6	Functions not used internally could be marked external	26
-NC-7	Typos
-
-L-1	Do not use deprecated library functions	7
-L-2	Empty Function Body - Consider commenting why	1
-L-3	Initializers could be front-run	1
-L-4	Unsafe ERC20 operation(s)	5
