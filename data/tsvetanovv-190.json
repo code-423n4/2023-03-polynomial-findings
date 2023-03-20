@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "tsvetanovv",
+  "risk": "2",
+  "title": "Some ERC20 tokens deduct a fee on transfer",
+  "issueId": 190,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/190"
+}
