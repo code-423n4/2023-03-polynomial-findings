@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "RaymondFam",
+  "risk": "2",
+  "title": "Use of hard coded decimals of 18 for collateral token",
+  "issueId": 90,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/90"
+}
