@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "KIntern_NA",
+  "risk": "3",
+  "title": "Function `hedgePositions` is incorrect, because it missed the `queuedPerpSize` in the calculation",
+  "issueId": 113,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/113"
+}
