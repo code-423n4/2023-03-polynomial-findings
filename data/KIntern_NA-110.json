@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "KIntern_NA",
+  "risk": "3",
+  "title": "Wrong calculation of `normalizationFactor`, leads to `normalizationFactor` never changes, and hedging will be incorrect",
+  "issueId": 110,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/110"
+}
