@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "joestakey",
+  "risk": "2",
+  "title": "No slippage checks in `LiquidityPool.deposit` and `withdraw` can result in losses for liquidity providers",
+  "issueId": 181,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/181"
+}
