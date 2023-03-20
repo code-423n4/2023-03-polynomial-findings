@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "KIntern_NA",
+  "risk": "3",
+  "title": "Attacker can front-run to transfer short token/power perp tokens to users, and prevent them from opening positions",
+  "issueId": 109,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/109"
+}
