@@ -796,6 +796,12 @@ At the start of the project, the system may need to be stopped or upgraded, I su
 
 (https://github.com/maxwoe/solidity_patterns/blob/master/security/EmergencyStop.sol)
 
+##
+
+
+
+
+
 
 
    
