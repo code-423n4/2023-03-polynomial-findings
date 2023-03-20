@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "btk",
+  "risk": "2",
+  "title": "Due to the lack of sanity checks, the `saveToken()` function will allow the auth to transfer the underlying token",
+  "issueId": 106,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/106"
+}
