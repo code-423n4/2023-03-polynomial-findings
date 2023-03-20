@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "sakshamguruji",
+  "risk": "2",
+  "title": "No Check For maxDepositAmount in KangarooVault",
+  "issueId": 141,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/141"
+}
