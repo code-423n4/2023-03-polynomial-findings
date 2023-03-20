@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "auditor0517",
+  "risk": "3",
+  "title": "`usedFunds` is wrong after `Liquidity.closeLong`, `openShort` and `closeShort`",
+  "issueId": 235,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/235"
+}
