@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "joestakey",
+  "risk": "2",
+  "title": "`ShortToken.tokenURI()` does not comply with `EIP-721`",
+  "issueId": 163,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/163"
+}
