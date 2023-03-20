@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "`KangarooVault.initiateDeposit`, `KangarooVault.processDepositQueue`, `KangarooVault.initiateWithdrawal`, and `KangarooVault.processWithdrawalQueue` functions do not use `whenNotPaused` modifier",
+  "issueId": 232,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/232"
+}
