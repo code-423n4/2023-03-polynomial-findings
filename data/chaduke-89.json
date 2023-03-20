@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "chaduke",
+  "risk": "2",
+  "title": "KangarooVault.removeCollateral() fails to call EXCHANGE.addCollateral(), as result, the collateral is not removed from the position.",
+  "issueId": 89,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/89"
+}
