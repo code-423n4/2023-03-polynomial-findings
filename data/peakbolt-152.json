@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "peakbolt",
+  "risk": "3",
+  "title": "Incorrect calculation of usedFunds in LiquidityPool leads to lower than expected token price",
+  "issueId": 152,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/152"
+}
