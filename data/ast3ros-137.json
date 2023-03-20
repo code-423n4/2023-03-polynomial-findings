@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "ast3ros",
+  "risk": "3",
+  "title": "[H-1] There is no fallback oracle in place should the prices from the Synthetix protocol or Perpetual market become stale or malfunction.",
+  "issueId": 137,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/137"
+}
