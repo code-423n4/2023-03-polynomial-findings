@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "MiloTruck",
+  "risk": "2",
+  "title": "Short positions with minimum collateral can be liquidated even though `canLiquidate()` returns `false`",
+  "issueId": 146,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/146"
+}
