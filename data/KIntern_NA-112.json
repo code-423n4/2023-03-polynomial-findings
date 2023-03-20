@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "KIntern_NA",
+  "risk": "3",
+  "title": "Attacker can transfer all SUSD’s balance of LiquidityPool as margin to Synthetix perpetual market, and break the actions of users until the pool is rebalanced by the authority.",
+  "issueId": 112,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/112"
+}
