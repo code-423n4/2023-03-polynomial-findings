@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "bytes032",
+  "risk": "3",
+  "title": "Malicious user can DoS the protocol from deploying by front running SystemManager.init",
+  "issueId": 124,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/124"
+}
