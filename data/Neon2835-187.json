@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "Neon2835",
+  "risk": "3",
+  "title": "Critical Vulnerabilities: Attackers use automated bot scripts to front-run trades, preventing new users from opening short trades, disrupting and controlling the Polynomial protocol market",
+  "issueId": 187,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/187"
+}
