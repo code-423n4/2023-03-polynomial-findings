@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "Some functions that call `Exchange.getMarkPrice` function do not check if `Exchange.getMarkPrice` function's returned `markPrice` is 0",
+  "issueId": 220,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/220"
+}
