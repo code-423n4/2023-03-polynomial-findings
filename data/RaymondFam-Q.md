@@ -46,8 +46,17 @@ In LiquidityPool.sol, consider adding the `availableFunds` check in [`withdraw()
 Note: There has been a logic flaw in the check of which I have separately submitted the vulnerability in a different report.
 
 ## Missing fee provision for depositors in KangarooVault.sol
-Consider implementing [`devFee`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L99) like it has been done so in LiquidityPool.sol so that liquidity providers, the core counterparts to the trade market, will be more incentivized providing liquidity to the vault.
+Consider implementing [`devFee`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L99) on [`withdrawalFee`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L316-L320) like it has been done so in LiquidityPool.sol so that liquidity providers, the core counterparts to the trade market, will be more incentivized providing liquidity to the vault.
 
+## Missing upper bound check on deposit amount
+In KangarooVault.sol, `maxDepositAmount` has been set but never implemented. Consider including it in `initiateDeposit()`:
+
+[File: KangarooVault.sol#L185](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L185)
+
+```diff
+        require(amount >= minDepositAmount);
++        require(amount <= maxDepositAmount);
+```
 ## Underflow check
 Consider adding an underflow check for `availableFunds` in `processWithdrawalQueue()` of KangarooVault.sol.
 
