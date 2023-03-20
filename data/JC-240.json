@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "JC",
+  "risk": "2",
+  "title": "LiquidityPool.executePerpOrders(): dangerous payable function",
+  "issueId": 240,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/240"
+}
