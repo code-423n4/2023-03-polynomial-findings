@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "carlitox477",
+  "risk": "2",
+  "title": "`VaultToken.setVault` can be frontrun, forcing redeployment of `VaultToken` and `KangarooVault` contracts",
+  "issueId": 91,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/91"
+}
