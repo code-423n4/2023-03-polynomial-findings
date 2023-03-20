@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "chrisdior4",
+  "risk": "2",
+  "title": "Use of deprecated safeApprove() is discouraged and missing approve to zero could cause certain token transfer to fail",
+  "issueId": 171,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/171"
+}
