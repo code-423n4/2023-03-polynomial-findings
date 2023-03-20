@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "bin2chen",
+  "risk": "2",
+  "title": "saveToken() SUSD may still be transfer",
+  "issueId": 134,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/134"
+}
