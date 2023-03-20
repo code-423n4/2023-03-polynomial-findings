@@ -29,3 +29,7 @@ for (uint256 i = 0; i < idCount; i++) {
 
 +       queuedDepositHead = cachedQueuedDepositHead;
 ```
+G2. There is no need to call ``getTokenPrice();`` inside the for loop to get the token price. This line can be moved before the for loop so that it will be called only once to save gas.
+
+[https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L271](https://github.com/code-423n4/2023-03-polynomial/blob/aeecafc8aaceab1ebeb94117459946032ccdff1e/src/KangarooVault.sol#L271)
+
