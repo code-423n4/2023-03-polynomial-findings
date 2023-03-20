@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "ak1",
+  "risk": "3",
+  "title": "KangarooVault.sol : anyone can call the `processWithdrawalQueue`. This would hurt the user when the token price is low",
+  "issueId": 239,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/239"
+}
