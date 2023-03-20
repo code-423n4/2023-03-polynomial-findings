@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "bin2chen",
+  "risk": "3",
+  "title": "KangarooVault.removeCollateral() Lack of actual calls EXCHANGE.removeCollateral()",
+  "issueId": 133,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/133"
+}
