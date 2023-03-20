@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "bytes032",
+  "risk": "3",
+  "title": "VaultToken's setVault function lacks access control, which will lock all the current funds in the KangarooVault.",
+  "issueId": 125,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/125"
+}
