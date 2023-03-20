@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "`ShortCollateral.liquidate` function does not guarantee that `collateralPrice` is valid because it does not check `isInvalid` returned by `synthetixAdapter.getAssetPrice(currencyKey)`",
+  "issueId": 217,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/217"
+}
