@@ -102,13 +102,72 @@ Consider adhering to the above guidelines for all contract instances entailed.
 ## On chain over off chain implementation of `referralCode`
 `referralCode` currently works as a function parameter serving only to be emitted in the trading methods. Consider adopting a brief but comprehensive set of on chain logic that will make it permissionless instead of handling the affiliate programs off chain via backend API logging.      
 
-## Constants should be defined rather than using magic numbers
-Consider defining magic numbers to constants, serving to improve code readability and maintainability.
+## Unspecific compiler version pragma
+For some source-units the compiler version pragma is very unspecific, i.e. ^0.8.9. While this often makes sense for libraries to allow them to be included with multiple different versions of an application, it may be a security risk for the actual application implementation itself. A known vulnerable compiler version may accidentally be selected or security tools might fall-back to an older compiler version ending up actually checking a different EVM compilation that is ultimately deployed on the blockchain.
 
-Here is an instance entailed pertaining to `2e18`:
+Avoid floating pragmas where possible. It is highly recommend pinning a concrete compiler version (latest without security issues) in at least the top-level “deployed” contracts to make it unambiguous which compiler version is being used. Rule of thumb: a flattened source-unit should have at least one non-floating concrete solidity compiler version pragma.
 
-[File: LiquidityPool.sol#L733](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L733)
+## Use a more recent version of solidity
+The protocol adopts version 0.8.9 on writing contracts. For better security, it is best practice to use the latest Solidity version, 0.8.17.
+
+Security fix list in the versions can be found in the link below:
+
+https://github.com/ethereum/solidity/blob/develop/Changelog.md
+
+## Solidity Compiler optimization could be problematic
+```
+hardhat.config.js:
+  29  module.exports = {
+  30:   solidity: {
+  31:     compilers: [
+  32:       {
+  33:         version: "0.8.9",
+  34:         settings: {
+  35:           optimizer: {
+  36:               enabled: true,
+  37:               runs: 1000000
+  38
+            }
+```
+Description: The protocol has enabled optional compiler optimizations in Solidity. There have been several optimization bugs with security implications. Moreover, optimizations are actively being developed. Solidity compiler optimizations are disabled by default, and it is unclear how many contracts in the wild actually use them.
+
+Therefore, it is unclear how well they are being tested and exercised. High-severity security issues due to optimization bugs have occurred in the past. A high-severity bug in the emscripten-generated solc-js compiler used by Truffle and Remix persisted until late 2018. The fix for this bug was not reported in the Solidity CHANGELOG.
+
+Another high-severity optimization bug resulting in incorrect bit shift results was patched in Solidity 0.5.6. More recently, another bug due to the incorrect caching of keccak256 was reported. A compiler audit of Solidity from November 2018 concluded that the optional optimizations may not be safe. It is likely that there are latent bugs related to optimization and that new bugs will be introduced due to future optimizations.
+
+Exploit Scenario A latent or future bug in Solidity compiler optimizations—or in the Emscripten transpilation to solc-js—causes a security vulnerability in the contracts.
+
+Recommendation: Short term, measure the gas savings from optimizations and carefully weigh them against the possibility of an optimization-related bug. Long term, monitor the development and adoption of Solidity compiler optimizations to assess their maturity.
+
+## Use `delete` to clear variables
+`delete a` assigns the initial value for the type to `a`. i.e. for integers it is equivalent to `a = 0`, but it can also be used on arrays, where it assigns a dynamic array of length zero or a static array of the same length with all elements reset. For structs, it assigns a struct with all members reset. Similarly, it can also be used to set an address to zero address or a boolean to false. It has no effect on whole mappings though (as the keys of mappings may be arbitrary and are generally unknown). However, individual keys and what they map to can be deleted: If `a` is a mapping, then `delete a[x]` will delete the value stored at x.
+
+The delete key better conveys the intention and is also more idiomatic.
+
+For instance, the `a[x] = false` instance below may be refactored as follows:
+
+[File: KangarooVault.sol#L719](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L719)
+
+```diff
+-        lastTradeData.isOpen = false;
++        delete lastTradeData.isOpen;
+```
+## Tokens accidentally sent to the contract cannot be recovered
+It is deemed unrecoverable if the tokens accidentally arrive at the contract addresses, which has happened to many popular projects. Consider adding a recovery code to your critical contracts.
+
+## Gas griefing/theft is possible on unsafe external call
+`return` data (bool success,) has to be stored due to EVM architecture, if in a usage like below, ‘out’ and ‘outsize’ values are given (0,0). Thus, this storage disappears and may come from external contracts a possible gas grieving/theft problem is avoided as denoted in the link below:
+
+https://twitter.com/pashovkrum/status/1607024043718316032?t=xs30iD6ORWtE2bTTYsCFIQ&s=19
+
+Here are the two instances entailed:
+
+[File: KangarooVault.sol#L454-L457](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L454-L457)
+[File: LiquidityPool.sol#L708-L713](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L708-L713)
 
 ```solidity
-        delta = spotPrice.mulDivDown(2e18, pricingConstant);
+        (bool success,) = feeReceipient.call{value: msg.value}("");
+        require(success);
 ```
+## More in-depth tests needed
+Consider extending the test suites to include edge cases, and where possible implement fuzzing that will often unfold many unexpected incidents that could break. This will greatly make the code safer and more robust to vulnerability attacks.
