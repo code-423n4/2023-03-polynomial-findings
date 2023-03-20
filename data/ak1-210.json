@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "ak1",
+  "risk": "3",
+  "title": "Exchange.sol#L87 : openTrade is returning incorrect totalCost value which has accounting issue when open or closing the trade.",
+  "issueId": 210,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/210"
+}
