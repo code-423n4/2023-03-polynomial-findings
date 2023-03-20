@@ -40,6 +40,9 @@ For instance, for failing failing to set [`baseTradingFee`](https://github.com/c
 
 Although this can also be circumvented by `PauseModifier` upon contract deployment, it will require added work to maneuver since `systemManager.isPaused(key) == false` by default. 
 
+## Missing `availableFunds` check
+In LiquidityPool.sol, consider adding the `availableFunds` check in [`withdraw()`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L247-L259) just as it has been done so in [`processWithdraws()`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L295-L299). Otherwise, users could dodge it to drain the contract `SUSD` balance when it should not be, i.e. `totalFunds < uint256(usedFunds)`.
+
 ## Zero value check at the constructor
 Zero value checks should be implemented at the constructor to avoid accidental error(s) that could result in non-functional calls associated with it particularly when assigning immutable variables.
 
@@ -55,6 +58,34 @@ For instance, the constructor below may be refactored as follows:
         PRICING_CONSTANT = _priceNormalizationFactor;
         systemManager = _systemManager;
     }
+```
+## Inheritance from interface
+contract `ShortToken` should inherit from interface `IShortToken` just as it has been likewise done so in ShortCollateral.sol. This will spare the contract from needing to include the struct `ShortPosition`.
+
+[File: ShortToken.sol#L4-L22](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/ShortToken.sol#L4-L22)
+  
+```diff
+import {ERC721} from "solmate/tokens/ERC721.sol";
+import {ISystemManager} from "./interfaces/ISystemManager.sol";
+import {IPowerPerp} from "./interfaces/IPowerPerp.sol";
++import {IShortToken} from "./interfaces/IShortToken.sol";
+
+- contract ShortToken is ERC721 {
++ contract ShortToken is ERC721, IShortToken {
+    bytes32 public immutable marketKey;
+    address public exchange;
+    ISystemManager public immutable systemManager;
+    IPowerPerp public powerPerp;
+
+    uint256 public nextId = 1;
+    uint256 public totalShorts;
+
+-    struct ShortPosition {
+-        uint256 positionId;
+-        uint256 shortAmount;
+-        uint256 collateralAmount;
+-        address collateral;
+-    }
 ```
 ## Devoid of system documentation and complete technical specification
 A system’s design specification and supporting documentation should be almost as important as the system’s implementation itself. Users rely on high-level documentation to understand the big picture of how a system works. Without spending time and effort to create palatable documentation, a user’s only resource is the code itself, something the vast majority of users cannot understand. Security assessments depend on a complete technical specification to understand the specifics of how a system works. When a behavior is not specified (or is specified incorrectly), security assessments must base their knowledge in assumptions, leading to less effective review. Maintaining and updating code relies on supporting documentation to know why the system is implemented in a specific way. If code maintainers cannot reference documentation, they must rely on memory or assistance to make high-quality changes. Currently, the only documentation available is a single README file, as well as code comments.
