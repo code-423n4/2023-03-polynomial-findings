@@ -9,7 +9,8 @@ for (uint256 i = 0; i < idCount; i++) {
 
 
             if (current.requestedTime == 0 || block.timestamp < current.requestedTime + minDepositDelay) {
-                return;
+-                return;
++                break;
             }
 
             uint256 tokensToMint = current.depositedAmount.divWadDown(tokenPrice);
