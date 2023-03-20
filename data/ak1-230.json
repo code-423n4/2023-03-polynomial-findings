@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "ak1",
+  "risk": "3",
+  "title": "LiquidityPool.sol#L657 : setFees() could be abused to steal the funds when there is huge transacion is happening.",
+  "issueId": 230,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/230"
+}
