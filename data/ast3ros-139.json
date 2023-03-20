@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "ast3ros",
+  "risk": "3",
+  "title": "[H-3] Any account can mint or burn an unlimited number of vault tokens and drain the Kangaroo Vault.",
+  "issueId": 139,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/139"
+}
