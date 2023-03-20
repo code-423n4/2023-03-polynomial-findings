@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "KIntern_NA",
+  "risk": "3",
+  "title": "Function `KangarooVault.removeCollateral` misses calling `Exchange.removeCollateral()` to regain collateral tokens",
+  "issueId": 111,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/111"
+}
