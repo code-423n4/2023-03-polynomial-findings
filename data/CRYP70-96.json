@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "CRYP70",
+  "risk": "3",
+  "title": "Whale user could force the `LiquidityPool` into insolvency through bypassing the solvency check",
+  "issueId": 96,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/96"
+}
