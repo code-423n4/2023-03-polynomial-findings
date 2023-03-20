@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "ast3ros",
+  "risk": "3",
+  "title": "[H-2] Users can suffer losses when depositing and withdrawing from the liquidity pool due to delays and the availability of instant deposit/withdraw functions.",
+  "issueId": 138,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/138"
+}
