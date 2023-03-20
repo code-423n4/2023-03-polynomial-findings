@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "ast3ros",
+  "risk": "2",
+  "title": "[M-1] The liquidity token price may not be calculated if the pool makes a profit from trading on the perpetuals market.",
+  "issueId": 140,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/140"
+}
