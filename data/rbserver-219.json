@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "`KangarooVault._resetTrade`, `LiquidityPool.rebalanceMargin`, and `LiquidityPool._getTotalMargin` functions should check `isInvalid`, which is returned by external perp market contract's `remainingMargin` function, and revert if such `isInvalid` is true",
+  "issueId": 219,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/219"
+}
