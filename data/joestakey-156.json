@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "joestakey",
+  "risk": "2",
+  "title": "Approved operators of a `ShortToken` cannot close the associated short trade or add collateral to it.",
+  "issueId": 156,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/156"
+}
