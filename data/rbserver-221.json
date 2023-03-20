@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "`LiquidityPool._getDelta` and `LiquidityPool._calculateMargin` functions should execute `require(!isInvalid && spotPrice > 0)` instead of `require(!isInvalid || spotPrice > 0)`",
+  "issueId": 221,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/221"
+}
