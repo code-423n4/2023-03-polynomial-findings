@@ -43,6 +43,20 @@ Although this can also be circumvented by `PauseModifier` upon contract deployme
 ## Missing `availableFunds` check
 In LiquidityPool.sol, consider adding the `availableFunds` check in [`withdraw()`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L247-L259) just as it has been done so in [`processWithdraws()`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L295-L299). Otherwise, users could dodge it to drain the contract `SUSD` balance when it should not be, i.e. `totalFunds < uint256(usedFunds)`.
 
+Note: There has been a logic flaw in the check of which I have separately submitted the vulnerability in a different report.
+
+## Missing fee provision for depositors in KangarooVault.sol
+Consider implementing [`devFee`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L99) like it has been done so in LiquidityPool.sol so that liquidity providers, the core counterparts to the trade market, will be more incentivized providing liquidity to the vault.
+
+## Underflow check
+Consider adding an underflow check for `availableFunds` in `processWithdrawalQueue()` of KangarooVault.sol.
+
+[File: KangarooVault.sol#L279](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L279)
+
+```diff
++            require (totalFunds >= usedFunds);
+            uint256 availableFunds = totalFunds - usedFunds;
+```
 ## Zero value check at the constructor
 Zero value checks should be implemented at the constructor to avoid accidental error(s) that could result in non-functional calls associated with it particularly when assigning immutable variables.
 
@@ -186,6 +200,8 @@ For instance, the `a[x] = false` instance below may be refactored as follows:
 ## Tokens accidentally sent to the contract cannot be recovered
 It is deemed unrecoverable if the tokens accidentally arrive at the contract addresses, which has happened to many popular projects. Consider adding a recovery code to your critical contracts.
 
+Consider adding [`saveToken()`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/KangarooVault.sol#L547-L550) in LiquidityPool.sol and/or Exchange.sol where possible. 
+
 ## Gas griefing/theft is possible on unsafe external call
 `return` data (bool success,) has to be stored due to EVM architecture, if in a usage like below, ‘out’ and ‘outsize’ values are given (0,0). Thus, this storage disappears and may come from external contracts a possible gas grieving/theft problem is avoided as denoted in the link below:
 
@@ -202,3 +218,55 @@ Here are the two instances entailed:
 ```
 ## More in-depth tests needed
 Consider extending the test suites to include edge cases, and where possible implement fuzzing that will often unfold many unexpected incidents that could break. This will greatly make the code safer and more robust to vulnerability attacks.
+
+## Comment and code mismatch
+[File: LiquidityPool.sol#L86-L87](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/LiquidityPool.sol#L86-L87)
+
+```diff
+-    /// @notice Minimum deposit delay
++    /// @notice Minimum withdrawal delay
+    uint256 public minWithdrawDelay;
+```
+## Efficient code usage
+In Exchange.sol, [`getMarkPrice()`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/Exchange.sol#L186-L202) and [`_updateFundingRate()`](https://github.com/code-423n4/2023-03-polynomial/blob/main/src/Exchange.sol#L409-L424) share a big chunk of identical code. Consider making a minor restructure to have the repeated code internally invoked that will have a good side effect of making `fundingLastUpdated` more recently updated.
+
+```diff
+-    function _updateFundingRate() internal {
++    function _updateFundingRate() internal returns (uint256 normalizationFactor) {
+        (int256 fundingRate,) = getFundingRate();
+        fundingRate = fundingRate / 1 days;
+
+        int256 currentTimeStamp = int256(block.timestamp);
+        int256 fundingLastUpdatedTimestamp = int256(fundingLastUpdated);
+
+        int256 totalFunding = wadMul(fundingRate, (currentTimeStamp - fundingLastUpdatedTimestamp));
+        int256 normalizationUpdate = 1e18 - totalFunding;
+
+        normalizationFactor = normalizationFactor.mulWadDown(uint256(normalizationUpdate));
+
+        emit UpdateFundingRate(fundingLastUpdated, normalizationFactor);
+
+        fundingLastUpdated = block.timestamp;
+    }
+```
+
+```diff 
+    function getMarkPrice() public view override returns (uint256 markPrice, bool isInvalid) {
+        (uint256 baseAssetPrice, bool invalid) = pool.baseAssetPrice();
+        isInvalid = invalid;
+
+-        (int256 fundingRate,) = getFundingRate();
+-        fundingRate = fundingRate / 1 days;
+
+-        int256 currentTimeStamp = int256(block.timestamp);
+-        int256 fundingLastUpdatedTimestamp = int256(fundingLastUpdated);
+
+-        int256 totalFunding = wadMul(fundingRate, (currentTimeStamp - fundingLastUpdatedTimestamp));
+-        int256 normalizationUpdate = 1e18 - totalFunding;
+-        uint256 newNormalizationFactor = normalizationFactor.mulWadDown(uint256(normalizationUpdate));
+
++        uint256 newNormalizationFactor = _updateFundingRate();
+
+        uint256 squarePrice = baseAssetPrice.mulDivDown(baseAssetPrice, PRICING_CONSTANT);
+        markPrice = squarePrice.mulWadDown(newNormalizationFactor);
+    }
