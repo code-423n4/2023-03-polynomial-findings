@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "peakbolt",
+  "risk": "3",
+  "title": "Missing totalFunds update in LiquidityPool's OpenShort(), causing LiquidityPool token holder to lose a portion of their token value",
+  "issueId": 153,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/153"
+}
