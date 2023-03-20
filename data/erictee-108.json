@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "erictee",
+  "risk": "2",
+  "title": "Unbounded fees leads to DOS upon withdrawal and deposit.",
+  "issueId": 108,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/108"
+}
