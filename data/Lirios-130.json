@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "Lirios",
+  "risk": "2",
+  "title": "admin can block vault withdrawals, no limits on setDelays",
+  "issueId": 130,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/130"
+}
