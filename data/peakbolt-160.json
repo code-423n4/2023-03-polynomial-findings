@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "peakbolt",
+  "risk": "3",
+  "title": "Division by zero error causes KangarooVault to be DoS with funds locked inside",
+  "issueId": 160,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/160"
+}
