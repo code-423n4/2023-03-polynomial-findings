@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "CRYP70",
+  "risk": "2",
+  "title": "No check for existing fee recipient can result in a perminant loss of Eth in `KangarooVault`'s receive function",
+  "issueId": 95,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/95"
+}
