@@ -1,0 +1,8 @@
+{
+  "contest": 222,
+  "handle": "rbserver",
+  "risk": "2",
+  "title": "Calling `KangarooVault.initiateDeposit`, `KangarooVault.initiateWithdrawal`, `LiquidityPool.deposit`, and `LiquidityPool.withdraw` functions can cause users to transfer some tokens to target contracts without receiving anything in return",
+  "issueId": 213,
+  "issueUrl": "https://github.com/code-423n4/2023-03-polynomial-findings/issues/213"
+}
